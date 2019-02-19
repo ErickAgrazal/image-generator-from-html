@@ -1,0 +1,13 @@
+{
+    "Settings": {
+        "templateConfig": {
+            "folder": "templates",
+            "filename": "index.html" 
+        },
+        "exportFileConfig": {
+            "folder": "templates",
+            "filename": "index",
+            "format": "jpg"
+        }
+    }
+  }
