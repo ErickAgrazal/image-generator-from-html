@@ -1,0 +1,27 @@
+{
+  "name": "image-generator-from-html",
+  "version": "0.0.1",
+  "description": "This is a package that generates an image given an HTML",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ErickAgrazal/image-generator-from-html.git"
+  },
+  "keywords": [
+    "image-generator",
+    "image",
+    "html"
+  ],
+  "author": "Erick Agrazal",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ErickAgrazal/image-generator-from-html/issues"
+  },
+  "homepage": "https://github.com/ErickAgrazal/image-generator-from-html#readme",
+  "dependencies": {
+    "html2canvas": "^1.0.0-alpha.12"
+  }
+}
