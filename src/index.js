@@ -1,22 +1,31 @@
-// // include the node module
-// var wkhtmltox = require("wkhtmltox");
+// include the node module
+const wkhtmltox = require("wkhtmltox"),
+      path = require('path'),
+      config = require('config'),
+      fs = require('fs'),
+      ora = require('ora');
 
-// // instantiate a new converter.
-// var converter = new wkhtmltox();
+// Initializing spinner
+const spinner = ora('Generating images based on given template').start();
 
-// // Locations of the binaries can be specified, but this is
-// // only needed if the programs are located outside your PATH
-// converter.wkhtmltopdf   = '/opt/local/bin/wkhtmltopdf';
-// converter.wkhtmltoimage = '/opt/local/bin/wkhtmltoimage';
-
-// // Convert to pdf.
-// // Function takes (inputStream, optionsObject), returns outputStream.
-// converter.pdf(fs.createReadStream('foo.html'), { pageSize: "letter" })
-//     .pipe(fs.createWriteStream("foo.pdf"))
-//     .on("finish", done);
+// instantiate a new converter.
+const converter = new wkhtmltox();
 
 // // Convert to image.
 // // Function takes (inputStream, optionsObject), returns outputStream.
-// converter.image(fs.createReadStream('foo.html'), { format: "jpg" })
-//     .pipe(fs.createWriteStream("foo.jpg"))
-//     .on("finish", done);
+const templateConfig = config.get('Settings.templateConfig'),
+      exportFileConfig = config.get('Settings.exportFileConfig');
+
+const templatePath = path.resolve(__dirname,
+                                  templateConfig.folder || 'templates',
+                                  templateConfig.filename || 'index.html');
+const exportImagePath = path.resolve(__dirname,
+                                     exportFileConfig.folder || 'templates',
+                                     `${exportFileConfig.filename}.${exportFileConfig.format}` || 'index.jpg')
+
+converter.image(fs.createReadStream(templatePath), { format: "jpg" })
+    .pipe(fs.createWriteStream(exportImagePath))
+    .on("finish", () => {
+        spinner.text = "Images generated.";
+        spinner.stop();
+    });
