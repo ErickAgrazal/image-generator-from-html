@@ -1,5 +1,3 @@
-console.log('Testing');
-
 // // include the node module
 // var wkhtmltox = require("wkhtmltox");
 
