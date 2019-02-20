@@ -2,6 +2,13 @@
 
 Sofware that receives an HTML template, a text, and an image and use them to generate an image based on the template.
 
+## Pre-requisites
+To run in your machine, you'll need to have installed `wkhtmltopdf`. Here is the download URL: <a href="https://wkhtmltopdf.org/downloads.html">https://wkhtmltopdf.org/downloads.html</a>
+
+## How to run it?
+To run it, you just need to pass the needed variables and run:
+```npm run generate-image```
+
 ## Build Docker Image
 To build the docker image you should use:
 `docker build -t image-generator-js .`
