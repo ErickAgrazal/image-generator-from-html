@@ -16,6 +16,7 @@ class ImageGenerator {
         const exportFileConfig = config.get(exportFileConfigName);
 
         // Import and export files
+        this.intialTime = new Date();
         this.templateFile = {
             name: templateConfig.filename || 'index.html',
             path: path.resolve(__dirname, templateConfig.folder || 'templates', templateConfig.filename || 'index.html')
@@ -34,7 +35,7 @@ class ImageGenerator {
      * Renders the template to later be used by `generateImage`
      * @function {renderTemplate}
      **/
-    renderTemplate(){
+    async renderTemplate(){
         // TODO
     }
 
@@ -42,26 +43,30 @@ class ImageGenerator {
      * Generates an image based on the configuration from the construction process
      * @function {generateImage}
      **/
-    generateImage() {
-        this.renderTemplate();
+    async generateImage() {
+        await this.renderTemplate();  // Wait until the HTML is generated
         this.converter.image(fs.createReadStream(this.templateFile.path), { format: this.exportFile.format })
             .pipe(fs.createWriteStream(this.exportFile.path))
-            .on("finish", () => {
-                this.spinner.text = "";
-                this.spinner.stop();
-                console.log(`Image (${this.exportFile.name}.${this.exportFile.format}) generated and stored here: ${this.exportFile.path}.`.green); // outputs green text
-
-                // Exit node process
-                process.exit(22);
-            });
+            .on("finish", () => this.printReport());
     }
 
     /**
      * Prints the final report after the `generateImage` is called
      * @function {printReport}
      **/
-    printReport(templateFileName, exportFileName, exportFileFormat, exportFilePath) {
-        // TODO
+    printReport() {
+        this.spinner.text = "";
+        this.spinner.stop();
+        this.finalTime = new Date();
+        console.log(`\n-------------------------------------`);
+        console.log(`Process completed in ${(this.finalTime.getTime() - this.intialTime.getTime())/1000} seconds`);
+        console.log(`------------------------------------- \n`);
+        console.log(`Extra information:`);
+        console.log(`Template used: ${this.templateFile.name.green}`);
+        console.log(`Export file name: ${this.exportFile.name.green}`);
+        console.log(`Export file format: ${this.exportFile.format.green}`);
+        console.log(`Export file location: ${this.exportFile.path.green} \n`);
+        process.exit(22);
     }
 }
 
