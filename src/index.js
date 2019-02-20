@@ -75,9 +75,14 @@ class ImageGenerator {
      * @function {_exitProcess}
      **/
     _exitProcess() {
-        process.exit(22);
+        // TODO: Don't know why, but it seems that wkhtmltox keeps the process alive,
+        //       even after the it finishes it task. Even though, it's a nice idea to
+        //       have this "kind of" desctructor to delete anything needed.
+        process.exit();
     }
 }
 
-const imageGenerator = new ImageGenerator();
-imageGenerator.generateImage();
+if (typeof require !== 'undefined' && require.main===module) {
+    const imageGenerator = new ImageGenerator();
+    imageGenerator.generateImage();
+}
