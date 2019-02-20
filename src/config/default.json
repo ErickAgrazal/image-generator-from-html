@@ -2,7 +2,14 @@
     "Settings": {
         "templateConfig": {
             "folder": "templates",
-            "filename": "index.html" 
+            "filename": "index.html",
+            "context": {
+                "name": "Erick Agrazal",
+                "backgroundImage": {
+                    "name": "logo-dark.png",
+                    "alt": "Imagen"
+                }
+            }
         },
         "exportFileConfig": {
             "folder": "templates",

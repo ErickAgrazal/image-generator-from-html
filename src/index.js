@@ -4,7 +4,8 @@ const wkhtmltox = require("wkhtmltox"),
       config = require('config'),
       fs = require('fs'),
       ora = require('ora'),
-      colors = require('colors');
+      colors = require('colors'),
+      template = require("mustache");
 
 class ImageGenerator {
     /**
@@ -17,19 +18,34 @@ class ImageGenerator {
 
         // Import and export files
         this.intialTime = new Date();
+        
+        // Defining context
+        const context = Object.assign({containerFolder: path.resolve(__dirname, templateConfig.folder || 'templates')}, templateConfig.context);
+
         this.templateFile = {
             name: templateConfig.filename || 'index.html',
-            path: path.resolve(__dirname, templateConfig.folder || 'templates', templateConfig.filename || 'index.html')
+            path: path.resolve(__dirname, templateConfig.folder || 'templates', templateConfig.filename || 'index.html'),
+            context
         };
         this.exportFile = {
             name: `${exportFileConfig.filename}.${exportFileConfig.format}` || 'index.jpg',
             path: path.resolve(__dirname, exportFileConfig.folder || 'templates', `${exportFileConfig.filename}.${exportFileConfig.format}` || 'index.jpg'),
+            htmlPath: path.resolve(__dirname, exportFileConfig.folder || 'templates', `generated_${exportFileConfig.filename}.html` || 'generated_index.html'),
             format: exportFileConfig.format || 'jpg'
         };
 
         // Utilities
         this.converter = new wkhtmltox();
-        this.spinner = ora('Generating images based on given template').start();
+        this.spinner = ora('Initializing the generation of images based on given template').start();
+    }
+
+    /**
+     * Gets the context that will be printed to the template
+     * @function {_getContext}
+     */
+    _getContext(){
+        this.spinner.text = 'Getting context to render HTML.';
+        return this.templateFile.context;
     }
 
     /**
@@ -38,6 +54,19 @@ class ImageGenerator {
      **/
     async _renderTemplate(){
         // TODO
+        this.spinner.text = 'Rendering template and storing in memory.';
+        let html = template.render(fs.readFileSync(this.templateFile.path, 'utf8'), this._getContext());
+        this._writeRenderTemplate(html);
+    }
+
+    /**
+     * Writes rendered template
+     */
+    _writeRenderTemplate(html){
+        this.spinner.text = 'Writting rendered template to disk.';    
+        fs.writeFile(this.exportFile.htmlPath, html, (err, data)=>{
+            if (err) console.log(`There was an error storing the rendered template. More information: \n${err}`);
+        })
     }
 
     /**
@@ -46,7 +75,8 @@ class ImageGenerator {
      **/
     async generateImage() {
         await this._renderTemplate();  // Wait until the HTML is generated
-        this.converter.image(fs.createReadStream(this.templateFile.path), { format: this.exportFile.format })
+        this.spinner.text = 'Generating image based on the rendered HTML.';
+        this.converter.image(fs.createReadStream(this.exportFile.htmlPath), { format: this.exportFile.format })
             .pipe(fs.createWriteStream(this.exportFile.path))
             .on("finish", () => this._printReport());
     }
