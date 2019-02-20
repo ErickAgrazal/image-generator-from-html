@@ -27,15 +27,16 @@ class ImageGenerator {
             format: exportFileConfig.format || 'jpg'
         };
 
+        // Utilities
         this.converter = new wkhtmltox();
         this.spinner = ora('Generating images based on given template').start();
     }
 
     /**
      * Renders the template to later be used by `generateImage`
-     * @function {renderTemplate}
+     * @function {_renderTemplate}
      **/
-    async renderTemplate(){
+    async _renderTemplate(){
         // TODO
     }
 
@@ -44,17 +45,17 @@ class ImageGenerator {
      * @function {generateImage}
      **/
     async generateImage() {
-        await this.renderTemplate();  // Wait until the HTML is generated
+        await this._renderTemplate();  // Wait until the HTML is generated
         this.converter.image(fs.createReadStream(this.templateFile.path), { format: this.exportFile.format })
             .pipe(fs.createWriteStream(this.exportFile.path))
-            .on("finish", () => this.printReport());
+            .on("finish", () => this._printReport());
     }
 
     /**
      * Prints the final report after the `generateImage` is called
-     * @function {printReport}
+     * @function {_printReport}
      **/
-    printReport() {
+    _printReport() {
         this.spinner.text = "";
         this.spinner.stop();
         this.finalTime = new Date();
@@ -66,6 +67,14 @@ class ImageGenerator {
         console.log(`Export file name: ${this.exportFile.name.green}`);
         console.log(`Export file format: ${this.exportFile.format.green}`);
         console.log(`Export file location: ${this.exportFile.path.green} \n`);
+        this._exitProcess();
+    }
+
+    /**
+     * Exit the execution after the report is called
+     * @function {_exitProcess}
+     **/
+    _exitProcess() {
         process.exit(22);
     }
 }
