@@ -15,4 +15,4 @@ RUN  apt-get update && \
     cp wkhtmltox/bin/wk* /usr/local/bin/ && \
     npm install
 
-CMD ["node", "index.js"]
+CMD ["npm", "run", "generate-image"]

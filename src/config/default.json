@@ -4,7 +4,7 @@
             "folder": "templates",
             "filename": "index.html",
             "context": {
-                "name": "Erick Agrazal",
+                "name": "Emir Salazar",
                 "backgroundImage": {
                     "name": "logo-dark.png",
                     "alt": "Imagen"
@@ -12,9 +12,9 @@
             }
         },
         "exportFileConfig": {
-            "folder": "templates",
+            "folder": "exports",
             "filename": "index",
             "format": "jpg"
         }
     }
-  }
+}

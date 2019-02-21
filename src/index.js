@@ -21,6 +21,7 @@ class ImageGenerator {
         
         // Defining context
         const templatesFolderPath = decodeURI(path.resolve(__dirname, templateConfig.folder || 'templates'));
+        const exportFolderPath = decodeURI(path.resolve(__dirname, exportFileConfig.folder || 'exports'));
         const context = Object.assign({containerFolder: templatesFolderPath}, templateConfig.context);
 
         this.templateFile = {
@@ -30,8 +31,8 @@ class ImageGenerator {
         };
         this.exportFile = {
             name: `${exportFileConfig.filename}.${exportFileConfig.format}` || 'index.jpg',
-            path: path.resolve(templatesFolderPath, `${exportFileConfig.filename}.${exportFileConfig.format}` || 'index.jpg'),
-            htmlPath: path.resolve(templatesFolderPath, `generated_${exportFileConfig.filename}.html` || 'generated_index.html'),
+            path: path.resolve(exportFolderPath, `${exportFileConfig.filename}.${exportFileConfig.format}` || 'index.jpg'),
+            htmlPath: path.resolve(exportFolderPath, `generated_${exportFileConfig.filename}.html` || 'generated_index.html'),
             format: exportFileConfig.format || 'jpg'
         };
 
@@ -62,6 +63,7 @@ class ImageGenerator {
 
     /**
      * Writes rendered template
+     * @function {_writeRenderTemplate}
      */
     _writeRenderTemplate(html){
         this.spinner.text = 'Writting rendered template to disk.';    
@@ -90,9 +92,9 @@ class ImageGenerator {
         this.spinner.text = "";
         this.spinner.stop();
         this.finalTime = new Date();
-        console.log(`\n-------------------------------------`);
+        console.log(`\n----------------------------------------`);
         console.log(`Process completed in ${(this.finalTime.getTime() - this.intialTime.getTime())/1000} seconds`);
-        console.log(`------------------------------------- \n`);
+        console.log(`---------------------------------------- \n`);
         console.log(`Extra information:`);
         console.log(`Template used: ${this.templateFile.name.green}`);
         console.log(`Export file name: ${this.exportFile.name.green}`);
