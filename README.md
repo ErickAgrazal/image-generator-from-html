@@ -9,13 +9,15 @@ To run in your machine, you'll need to have installed `wkhtmltopdf`. Here is the
 To run it, you just need to pass the needed variables and run:
 ```npm run generate-image```
 
-## Build Docker Image
+## Docker
+
+### Build Docker Image
 To build the docker image you should use:
 `docker build -t image-generator-js .`
 
 *image-generator-js* is variable, you can use whichever name you like. Bear in mind that it will be used later on though.
 
-## Run the Docker Image
+### Run the Docker Image
 To run the software, use the following:
 
 `docker run image-generator-js`

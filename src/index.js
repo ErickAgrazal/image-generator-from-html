@@ -109,7 +109,11 @@ class ImageGenerator {
         // TODO: Don't know why, but it seems that wkhtmltox keeps the process alive,
         //       even after the it finishes it task. Even though, it's a nice idea to
         //       have this "kind of" desctructor to delete anything needed.
-        process.exit();
+        fs.unlink(this.exportFile.htmlPath, (err) => {
+            if (err) throw err;
+            console.log(`Rendered file ${this.exportFile.htmlPath} was ${"deleted".red}`);
+            process.exit();
+        });
     }
 }
 
