@@ -20,17 +20,18 @@ class ImageGenerator {
         this.intialTime = new Date();
         
         // Defining context
-        const context = Object.assign({containerFolder: path.resolve(__dirname, templateConfig.folder || 'templates')}, templateConfig.context);
+        const templatesFolderPath = decodeURI(path.resolve(__dirname, templateConfig.folder || 'templates'));
+        const context = Object.assign({containerFolder: templatesFolderPath}, templateConfig.context);
 
         this.templateFile = {
             name: templateConfig.filename || 'index.html',
-            path: path.resolve(__dirname, templateConfig.folder || 'templates', templateConfig.filename || 'index.html'),
+            path: path.resolve(templatesFolderPath, templateConfig.filename || 'index.html'),
             context
         };
         this.exportFile = {
             name: `${exportFileConfig.filename}.${exportFileConfig.format}` || 'index.jpg',
-            path: path.resolve(__dirname, exportFileConfig.folder || 'templates', `${exportFileConfig.filename}.${exportFileConfig.format}` || 'index.jpg'),
-            htmlPath: path.resolve(__dirname, exportFileConfig.folder || 'templates', `generated_${exportFileConfig.filename}.html` || 'generated_index.html'),
+            path: path.resolve(templatesFolderPath, `${exportFileConfig.filename}.${exportFileConfig.format}` || 'index.jpg'),
+            htmlPath: path.resolve(templatesFolderPath, `generated_${exportFileConfig.filename}.html` || 'generated_index.html'),
             format: exportFileConfig.format || 'jpg'
         };
 
