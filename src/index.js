@@ -62,6 +62,7 @@ class ImageGenerator {
 
     /**
      * Writes rendered template
+     * @function {_writeRenderTemplate}
      */
     _writeRenderTemplate(html){
         this.spinner.text = 'Writting rendered template to disk.';    
@@ -90,9 +91,9 @@ class ImageGenerator {
         this.spinner.text = "";
         this.spinner.stop();
         this.finalTime = new Date();
-        console.log(`\n-------------------------------------`);
+        console.log(`\n----------------------------------------`);
         console.log(`Process completed in ${(this.finalTime.getTime() - this.intialTime.getTime())/1000} seconds`);
-        console.log(`------------------------------------- \n`);
+        console.log(`---------------------------------------- \n`);
         console.log(`Extra information:`);
         console.log(`Template used: ${this.templateFile.name.green}`);
         console.log(`Export file name: ${this.exportFile.name.green}`);
