@@ -3,7 +3,7 @@ const assert = require('assert'),
       fs = require('fs');
 
 const _ = describe('ImageGenerator', function() {
-    it('should should generate an image', async () => {
+    it('should generate an image', async () => {
         const imageGenerator = new ImageGenerator({debug: false});
         const { exportSettings } = await imageGenerator.generateImage();
         assert.ok(fs.existsSync(exportSettings.path), 'Export image should exist');
