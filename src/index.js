@@ -135,7 +135,7 @@ class ImageGenerator {
 }
 
 if (typeof require !== 'undefined' && require.main===module) {
-    const imageGenerator = new ImageGenerator({debug: false});
+    const imageGenerator = new ImageGenerator();
     imageGenerator.generateImage();
 }
 
