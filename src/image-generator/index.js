@@ -22,8 +22,8 @@ class ImageGenerator {
         this.intialTime = new Date();
         
         // Defining context
-        const templatesFolderPath = decodeURI(path.resolve(__dirname, templateConfig.folder || 'templates'));
-        const exportFolderPath = decodeURI(path.resolve(__dirname, exportFileConfig.folder || 'exports'));
+        const templatesFolderPath = decodeURI(path.resolve(__dirname, '..', templateConfig.folder || 'templates'));
+        const exportFolderPath = decodeURI(path.resolve(__dirname, '..', exportFileConfig.folder || 'exports'));
         const context = Object.assign({containerFolder: templatesFolderPath}, templateConfig.context);
 
         this.templateFile = {

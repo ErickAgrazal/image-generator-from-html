@@ -1,5 +1,5 @@
 const assert = require('assert'),
-      { ImageGenerator } = require('./../index'),
+      { ImageGenerator } = require('./../image-generator'),
       fs = require('fs');
 
 const _ = describe('ImageGenerator', function() {
