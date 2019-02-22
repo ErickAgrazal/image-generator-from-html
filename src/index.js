@@ -7,14 +7,16 @@ const wkhtmltox = require("wkhtmltox"),
       colors = require('colors'),
       template = require("mustache");
 
+//   1280x720
+
 class ImageGenerator {
     /**
-     * Class' constructor
+     * Class constructor
      * @function {constructor}
      **/
-    constructor(templateConfigName='Settings.templateConfig', exportFileConfigName='Settings.exportFileConfig') {
-        const templateConfig = config.get(templateConfigName);
-        const exportFileConfig = config.get(exportFileConfigName);
+    constructor(settings={}) {
+        const templateConfig = config.get(settings.templateConfigName || 'Settings.templateConfig');
+        const exportFileConfig = config.get(settings.exportFileConfigName || 'Settings.exportFileConfig');
 
         // Import and export files
         this.intialTime = new Date();
@@ -38,7 +40,8 @@ class ImageGenerator {
 
         // Utilities
         this.converter = new wkhtmltox();
-        this.spinner = ora('Initializing the generation of images based on given template').start();
+        this.debug = settings.debug === undefined ? true : settings.debug;
+        if(this.debug){ this.spinner = ora('Initializing the generation of images based on given template').start(); }
     }
 
     /**
@@ -46,7 +49,7 @@ class ImageGenerator {
      * @function {_getContext}
      */
     _getContext(){
-        this.spinner.text = 'Getting context to render HTML.';
+        if(this.debug){ this.spinner.text = 'Getting context to render HTML.'; }
         return this.templateFile.context;
     }
 
@@ -55,18 +58,17 @@ class ImageGenerator {
      * @function {_renderTemplate}
      **/
     async _renderTemplate(){
-        // TODO
-        this.spinner.text = 'Rendering template and storing in memory.';
+        if(this.debug){ this.spinner.text = 'Rendering template and storing in memory.'; }
         let html = template.render(fs.readFileSync(this.templateFile.path, 'utf8'), this._getContext());
-        this._writeRenderTemplate(html);
+        this._writeRenderedTemplate(html);
     }
 
     /**
      * Writes rendered template
-     * @function {_writeRenderTemplate}
+     * @function {_writeRenderedTemplate}
      */
-    _writeRenderTemplate(html){
-        this.spinner.text = 'Writting rendered template to disk.';    
+    _writeRenderedTemplate(html){
+        if(this.debug){ this.spinner.text = 'Writting rendered template to disk.'; }
         fs.writeFile(this.exportFile.htmlPath, html, (err, data)=>{
             if (err) console.log(`There was an error storing the rendered template. More information: \n${err}`);
         })
@@ -78,19 +80,33 @@ class ImageGenerator {
      **/
     async generateImage() {
         await this._renderTemplate();  // Wait until the HTML is generated
-        this.spinner.text = 'Generating image based on the rendered HTML.';
+        if(this.debug){ this.spinner.text = 'Generating image based on the rendered HTML.'; }
+        return new Promise((resolve, reject) => this._exportImage({resolve, reject, onFinish: this._onFinish}));
+    }
+
+    _exportImage(_promiseSettings){
         this.converter.image(fs.createReadStream(this.exportFile.htmlPath), { format: this.exportFile.format })
             .pipe(fs.createWriteStream(this.exportFile.path))
-            .on("finish", () => this._printReport());
+            .on("finish", () => {
+                if(this.debug){ this._printReport(); }
+                _promiseSettings.onFinish();
+                this._exitProcess();
+                _promiseSettings.resolve({templateSettings: this.templateFile, exportSettings: this.exportFile});
+            });
     }
+
+    /**
+     * Prints the final report after the `generateImage` fires the `finish` event
+     * @function {_onFinish}
+     **/
+    _onFinish(){}
 
     /**
      * Prints the final report after the `generateImage` is called
      * @function {_printReport}
      **/
     _printReport() {
-        this.spinner.text = "";
-        this.spinner.stop();
+        this.spinner.text = ""; this.spinner.stop();
         this.finalTime = new Date();
         console.log(`\n----------------------------------------`);
         console.log(`Process completed in ${(this.finalTime.getTime() - this.intialTime.getTime())/1000} seconds`);
@@ -100,7 +116,6 @@ class ImageGenerator {
         console.log(`Export file name: ${this.exportFile.name.green}`);
         console.log(`Export file format: ${this.exportFile.format.green}`);
         console.log(`Export file location: ${this.exportFile.path.green} \n`);
-        this._exitProcess();
     }
 
     /**
@@ -113,13 +128,17 @@ class ImageGenerator {
         //       have this "kind of" desctructor to delete anything needed.
         fs.unlink(this.exportFile.htmlPath, (err) => {
             if (err) throw err;
-            console.log(`Rendered file ${this.exportFile.htmlPath} was ${"deleted".red}`);
+            if(this.debug){ console.log(`Rendered file ${this.exportFile.htmlPath.gray} was ${"deleted".red}`); }
             process.exit();
         });
     }
 }
 
 if (typeof require !== 'undefined' && require.main===module) {
-    const imageGenerator = new ImageGenerator();
+    const imageGenerator = new ImageGenerator({debug: false});
     imageGenerator.generateImage();
+}
+
+exports = module.exports = {
+    ImageGenerator
 }

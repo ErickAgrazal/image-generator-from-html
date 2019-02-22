@@ -4,7 +4,8 @@
             "folder": "templates",
             "filename": "index.html",
             "context": {
-                "name": "Emir Salazar",
+                "title": "Image Generator From HTML",
+                "subtitle": "This is an image generator using node!",
                 "backgroundImage": {
                     "name": "logo-dark.png",
                     "alt": "Imagen"
