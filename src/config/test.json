@@ -1,0 +1,21 @@
+{
+    "Settings": {
+        "templateConfig": {
+            "folder": "templates",
+            "filename": "index.html",
+            "context": {
+                "title": "Image Generator From HTML TEST",
+                "subtitle": "This is an image generator using node! TEST",
+                "backgroundImage": {
+                    "name": "logo-dark.png",
+                    "alt": "Imagen TEST"
+                }
+            }
+        },
+        "exportFileConfig": {
+            "folder": "exports",
+            "filename": "test",
+            "format": "jpg"
+        }
+    }
+}
