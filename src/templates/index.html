@@ -7,22 +7,32 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
     <title>Test</title>
+    <style>
+        .box-container {
+            width: 1280px;
+            height: 720px;
+            border-width: 9px;
+            border-style: solid;
+            border-color: orange;
+        }   
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                <h1>{{title}}</h1>
+    <div class="box-container">
+        <div class="container h-100">
+            <div class="row align-items-center h-100">
+                <div class="col-sm-12">
+                    <div class="align-middle">
+                        <div class="text-center">
+                            <h1>{{title}}</h1>
+                            <img src="{{containerFolder}}/{{ backgroundImage.name }}" alt="{{backgroundImage.alt}}" class="rounded mx-auto d-block">
+                            <h2>{{subtitle}}</h2>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-12">
-                <h1>{{subtitle}}</h1>
-            </div>
-        </div>
-        <img src="{{containerFolder}}/{{ backgroundImage.name }}" alt="{{backgroundImage.alt}}">
     </div>
     <!-- Added bootstrap for easiness of use -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
