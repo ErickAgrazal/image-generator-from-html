@@ -11,7 +11,7 @@ To install the dependencies:
 2. ```npm install```
 
 ## Configure your needs
-In order to configure the application to meet your needs, you should modify the `config/default.json` and add the corresponding template to the templates folder defined in it.
+In order to configure the application to meet your needs, you should modify the `config/default.json` and add the corresponding template and static files to the templates folder defined in it.
 
 ## How to run it?
 To run it, you just need to pass the needed variables and run:
